@@ -1,0 +1,10 @@
+option java_package = "com.mylike.oms.netty.entity"; 
+option java_outer_classname = "Message";
+
+message Msg
+{
+   optional string id = 1;
+   optional string cmd = 2;
+   optional string extId = 3;
+   optional string omServer = 4;
+}
