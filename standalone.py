@@ -487,8 +487,8 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     app.setApplicationName("美莱")
-    app.setApplicationVersion("1.0")
-    app.setApplicationDisplayName("MyLike P2 Client V2.2")
+    app.setApplicationVersion("2.3")
+    app.setApplicationDisplayName("MyLike P2 Client V2.3 console")
 
     webView = WebForm();
     #设置窗口大小
