@@ -1,4 +1,5 @@
 import logging;
+import traceback;
 class LogUtil():
     def __init__(self):
         logging.basicConfig(level=logging.INFO,
@@ -13,5 +14,10 @@ class LogUtil():
         logging.getLogger('').addHandler(console)
     def info(self,msg):
         logging.info(msg);
-    def error(self,msg):
+    def traceError(self,msg):
         logging.error(msg);
+    def error(self,msg,spit1,msg1,spit2,msg2):
+        logging.error(msg);
+        logging.error(msg1);
+        logging.error(msg2);
+        logging.error(traceback.extract_tb(msg2,1))

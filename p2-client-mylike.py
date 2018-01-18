@@ -125,6 +125,7 @@ if __name__=="__main__":
     # reg end
     webView.show()
     # webView.load(QtCore.QUrl("http://localhost:8080/doc/?webChannelBaseUrl=" + server.serverUrl().toString()))
-    webView.load(QtCore.QUrl("D:/mydocument/study/python/pyqt/standalone/index.html?webChannelBaseUrl=" + server.serverUrl().toString()))
+    # webView.load(QtCore.QUrl("D:/mydocument/study/python/pyqt/standalone/index.html?webChannelBaseUrl=" + server.serverUrl().toString()))
+    webView.load(QtCore.QUrl("D:/soft/bustools/print/PrintSample47.html?webChannelBaseUrl=" + server.serverUrl().toString()))
 
     exit(a.exec_())

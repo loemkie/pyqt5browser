@@ -32,6 +32,7 @@ port = 9999;#端口
 host=config.get("baseconf", "oms_host")
 BUFSIZE=8192
 
+trunk=config.get("baseconf", "trunk")
 #设置连接超时 要保证客户的接收文件服务器不能断
 #录音文件的接收器和应用服务器同一台，不会断
 # socket.setdefaulttimeout(0.01)
@@ -74,8 +75,8 @@ class OMClient(threading.Thread):
                 self.parseMsgFromOmServer(data);
             except:
                 info = sys.exc_info()
-                print(info[0], ":", info[1], ":", info[2])
-                traceback.print_tb(info[2], limit=1, file=sys.stdout)
+                log.error(info[0], ":", info[1], ":", info[2])
+                # traceback.print_tb(info[2], limit=1, file=sys.stdout)
                 log.info("从OM Server接收消息 失败");
                 # print("从OM Server接收消息 失败");
                 log.info(config.get("baseconf", "timeout")+"s 后重新连接");
@@ -87,7 +88,9 @@ class OMClient(threading.Thread):
         try:
             # outerTo="";#外呼号码
             # extId="";#分机号
-            xmlData="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n<outer to=\""+outerTo+"\"/>\n<ext id=\""+extId+"\"/>\n</Transfer>";
+            # xmlData="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n<outer to=\""+outerTo+"\"/>\n<ext id=\""+extId+"\"/>\n</Transfer>";
+            xmlData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n" \
+                      "<outer to=\"" + outerTo + "\"/>\n<ext id=\"" + extId + "\"/>\n<trunk id=\"" + trunk + "\"/>\n</Transfer>";
             # xmlData="15980882896"
             #xmlData.encode();
             msg=msg_pb2.Msg();
@@ -252,7 +255,7 @@ class WebSocketTransport(QWebChannelAbstractTransport):
             if result == 1:
                 break
         if result==0:
-            log.error("读取USB端口失败")
+            log.info("读取USB端口失败")
             userInfo["error"] = "读取USB端口失败";
         if dll.CVR_Authenticate() == 1:
             if (dll.CVR_Read_Content(1)) == 1:
@@ -441,7 +444,7 @@ def downloadRequested(download):
         download.stateChanged.connect(doDownload)
     except:
         info = sys.exc_info()
-        print(info[0], ":", info[1], ":", info[2])
+        log.error(info[0], ":", info[1], ":", info[2])
         traceback.print_tb(info[2], limit=1, file=sys.stdout)
 def doDownload(download):
     # log.info(download.path());
@@ -460,7 +463,7 @@ if __name__ == "__main__":
         QWebSocketServer.NonSecureMode
     )
     if not server.listen(QHostAddress.LocalHost, 12345):
-        log.error("监听端口 12345 失败,客户端已经打开...")
+        log.info("监听端口 12345 失败,客户端已经打开...")
         exit(1)
 
     clientWrapper = WebSocketClientWrapper(server)
@@ -488,7 +491,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setApplicationName("美莱")
     app.setApplicationVersion("2.3")
-    app.setApplicationDisplayName("MyLike P2 Client V2.3")
+    app.setApplicationDisplayName("MyLike P2 Client V2.3.2")
 
     webView = WebForm();
     #设置窗口大小

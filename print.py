@@ -267,10 +267,10 @@ class Form(QDialog):
                 row += 1
             cursor.setPosition(mainFrame.lastPosition())
             cursor.insertBlock(bodyFormat, bodyCharFormat)
-            cursor.insertText("We hope to continue doing business "
-                              "with you,")
+            cursor.insertText("董道王测试，高伟达，杭州美莱 "
+                              "丰胸,")
             cursor.insertBlock(bodyFormat, bodyCharFormat)
-            cursor.insertText("Yours sincerely")
+            cursor.insertText("结果保存在操作者自己的电脑上")
             cursor.insertBlock(bodyFormat)
             if page == len(self.statements):
                 cursor.insertBlock(bodyFormat, bodyCharFormat)
@@ -286,9 +286,9 @@ class Form(QDialog):
         if not dialog.exec_():
             return
         LeftMargin = 72
-        sansFont = QFont("Helvetica", 10)
+        sansFont = QFont("宋体", 9)
         sansLineHeight = QFontMetrics(sansFont).height()
-        serifFont = QFont("Times", 11)
+        serifFont = QFont("宋体", 9)
         fm = QFontMetrics(serifFont)
         DateWidth = fm.width(" September 99, 2999 ")
         CreditWidth = fm.width(" Credit ")
@@ -326,18 +326,18 @@ class Form(QDialog):
             y += serifLineHeight
 
             balance = statement.balance()
-            painter.drawText(x, y, "The balance of your account is $ {0:,.2f}".format(float(balance)))
+            painter.drawText(x, y, "董道王测试，高伟达，杭州美莱 $ {0:,.2f}".format(float(balance)))
             y += serifLineHeight
             if balance < 0:
                 painter.setPen(Qt.red)
-                text = "Please remit the amount owing immediately."
+                text = "请立即还款."
             else:
-                text = ("We are delighted to have done business "
-                        "with you.")
+                text = ("我们主要用于商业化 "
+                        "和你.")
             painter.drawText(x, y, text)
             painter.setPen(Qt.black)
             y += int(serifLineHeight * 1.5)
-            painter.drawText(x, y, "Transactions:")
+            painter.drawText(x, y, "谢谢:")
             y += serifLineHeight
 
             option = QTextOption(Qt.AlignRight|Qt.AlignVCenter)
@@ -378,7 +378,7 @@ class Form(QDialog):
             y = pageRect.height() - 72
             painter.drawLine(x, y, pageRect.width() - LeftMargin, y)
             y += 2
-            font = QFont("Helvetica", 9)
+            font = QFont("宋体", 9)
             font.setItalic(True)
             painter.setFont(font)
             option = QTextOption(Qt.AlignCenter)
