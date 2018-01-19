@@ -32,7 +32,6 @@ port = 9999;#端口
 host=config.get("baseconf", "oms_host")
 BUFSIZE=8192
 
-trunk=config.get("baseconf", "trunk")
 #设置连接超时 要保证客户的接收文件服务器不能断
 #录音文件的接收器和应用服务器同一台，不会断
 # socket.setdefaulttimeout(0.01)
@@ -83,14 +82,14 @@ class OMClient(threading.Thread):
                 time.sleep(int(config.get("baseconf", "timeout")))
                 omClient.reconnect()
                 # break;
-    # 外呼
     def send(self,outerTo,extId,omServer):
         try:
             # outerTo="";#外呼号码
             # extId="";#分机号
-            # xmlData="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n<outer to=\""+outerTo+"\"/>\n<ext id=\""+extId+"\"/>\n</Transfer>";
-            xmlData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n" \
-                      "<outer to=\"" + outerTo + "\"/>\n<ext id=\"" + extId + "\"/>\n<trunk id=\"" + trunk + "\"/>\n</Transfer>";
+            xmlData="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n<outer to=\""+outerTo+"\"/>\n<ext id=\""+extId+"\"/>\n</Transfer>";
+            # trunk = self.getTrunk(extId);
+            # xmlData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<Transfer attribute=\"Connect\">\n" \
+            #           "<outer to=\"" + outerTo + "\"/>\n<ext id=\"" + extId + "\"/>\n<trunk id=\"" + trunk + "\"/>\n</Transfer>";
             # xmlData="15980882896"
             #xmlData.encode();
             msg=msg_pb2.Msg();
