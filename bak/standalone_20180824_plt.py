@@ -25,34 +25,17 @@ from PyQt5.QtNetwork import *;
 #ini 文件
 from PyQt5.QtPrintSupport import QPrinter;
 import urllib.request;
-
 log=LogUtil();
 config = Config("config.ini")
 port = 9999;#端口
 # host = 'localhost';#OM server
 host=config.get("baseconf", "oms_host")
 BUFSIZE=8192
-url =  config.get("baseconf", "url")
-#加密解密url
-token = config.get("baseconf", "token")
-token_len = config.get("baseconf", "token_len")
-token_oms = config.get("baseconf", "token_oms")
-token_oms_len = config.get("baseconf", "token_oms_len")
+
 #设置连接超时 要保证客户的接收文件服务器不能断
 #录音文件的接收器和应用服务器同一台，不会断
 # socket.setdefaulttimeout(0.01)
 #连接OM server
-
-#encode start
-from encryutil import Encrypt;
-encryutil = Encrypt("P2MYLIKE");
-de_url = encryutil.decrypt_des(token);
-de_host = encryutil.decrypt_des(token_oms);
-realUrl = de_url[:int(token_len)];
-#实际赋值
-host = de_host[:int(token_oms_len)];
-url = realUrl;
-#end
 
 class OMClient(threading.Thread):
     def reconnect(self):
@@ -510,7 +493,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     app.setApplicationName("美莱")
-    app.setApplicationVersion("2.7.0")
+    app.setApplicationVersion("2.6.0")
     app.setApplicationDisplayName("MyLike P2 Client V2.6.0")
 
     webView = WebForm();
@@ -524,8 +507,7 @@ if __name__ == "__main__":
     app.addLibraryPath("./icon");
     app.setWindowIcon(QIcon("./icon/m.ico"));
     #conf
-    # url =  config.get("baseconf", "url")
-    # url = realUrl
+    url =  config.get("baseconf", "url")
     #url="http://127.0.0.1:8080/MylikeOMS/a/login";
     settting(webView.page().settings());
     webView.show()
