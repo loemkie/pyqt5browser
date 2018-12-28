@@ -18,16 +18,14 @@ import time
 import sys
 import traceback;
 import threading;
-import requests;
-
 from ini_op import Config;
 from log_util import LogUtil;
 from printer import Printer;
 from PyQt5.QtNetwork import *;
 #ini 文件
 from PyQt5.QtPrintSupport import QPrinter;
+import urllib.request;
 
-version = "2.8.0"
 log=LogUtil();
 config = Config("config.ini")
 port = 9999;#端口
@@ -44,8 +42,6 @@ token_oms_len = config.get("baseconf", "token_oms_len")
 p_token = config.get("baseconf", "p_token")
 p_token_len = config.get("baseconf", "p_token_len")
 p_port = config.get("baseconf", "p_port")
-
-web_sock_port = config.get("baseconf", "web_sock_port")
 #设置连接超时 要保证客户的接收文件服务器不能断
 #录音文件的接收器和应用服务器同一台，不会断
 # socket.setdefaulttimeout(0.01)
@@ -261,18 +257,7 @@ class WebSocketTransport(QWebChannelAbstractTransport):
             log.error(info[0], ":", info[1], ":", info[2])
             traceback.print_tb(info[2], limit=1, file=sys.stdout)
     def search(self,msg):
-        # webView.page().findText(msg["text"])
-        # data = {};
-        # data["version"] = version;
-        # data["id"] = "1";
-        # data["type"] = 10;
-        # self._socket.sendTextMessage(json.dumps(data));
-        # log.info(json.dumps(data))
-        browser = {};
-        browser["id"] = msg["id"];
-        browser["type"] = 10;
-        browser["version"] = version;
-        self._socket.sendTextMessage(json.dumps(browser))
+        webView.page().findText(msg["text"])
     #弹出下载文件选择框
     def download(self, msg):
         url = msg["url"];
@@ -504,7 +489,6 @@ def doDownload(download):
     # pos = filename.rfind("/")
     # if not filename[:pos] == "":
     #     os.startfile(filename[:pos]);  # 打开目录
-
 if __name__ == "__main__":
     from sys import argv, exit
 
@@ -514,8 +498,8 @@ if __name__ == "__main__":
         "QWebChannel Standalone Server",
         QWebSocketServer.NonSecureMode
     )
-    if not server.listen(QHostAddress.LocalHost, int(web_sock_port)):
-        log.info("监听端口 "+web_sock_port+" 失败,客户端已经打开...")
+    if not server.listen(QHostAddress.LocalHost, 12345):
+        log.info("监听端口 12345 失败,客户端已经打开...")
         exit(1)
 
     clientWrapper = WebSocketClientWrapper(server)
@@ -542,8 +526,8 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     app.setApplicationName("美莱")
-    app.setApplicationVersion(version)
-    app.setApplicationDisplayName("MyLike P2 Client V"+version)
+    app.setApplicationVersion("2.7.2")
+    app.setApplicationDisplayName("MyLike P2 Client V2.7.2")
 
     webView = WebForm();
     #设置窗口大小
@@ -569,6 +553,6 @@ if __name__ == "__main__":
     if not omClient.ping():
         url = bk_url;
     #end
-    webView.load(QtCore.QUrl(url+"?webChannelBaseUrl=" + server.serverUrl().toString()+"&version="+version))
+    webView.load(QtCore.QUrl(url+"?webChannelBaseUrl=" + server.serverUrl().toString()))
     omClient.send("OT", "EXTID","")
     exit(a.exec_())

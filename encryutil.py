@@ -48,8 +48,8 @@ class Encrypt():
             print(info[1])
             traceback.print_tb(info[2], limit=1, file=sys.stdout)
             return ""
-# t=Encrypt(key);
-# print(t.encrypt_des("http://10.100.81.187:8080/MylikeOMS"))
+t=Encrypt(key);
+print(t.encrypt_des("http://172.16.250.22:8080/MylikeOMS"))
 # print(t.encrypt_des("10.100.81.187"))
 
 # #

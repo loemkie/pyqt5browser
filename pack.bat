@@ -3,6 +3,6 @@ set dir1=D:/mydocument/myprojects/python/mylike/pyqt5/dist/lib
 set dir2=D:/mydocument/myprojects/python/mylike/pyqt5/dist/standalone
 xcopy "%dir1%" "%dir2%" /e /y
 
-"C:\Program Files (x86)\WinRAR\WinRAR.exe" a -ep1 D:\mydocument\myprojects\python\mylike\pyqt5\dist\mylike-p2_v2.7.1.rar ./dist\standalone
-echo press file mylike-p2_v2.7.1.rar
+"C:\Program Files (x86)\WinRAR\WinRAR.exe" a -ep1 D:\mydocument\myprojects\python\mylike\pyqt5\dist\mylike-p2_v2.8.0.rar ./dist\standalone
+echo press file mylike-p2_v2.8.0.rar
 pause
