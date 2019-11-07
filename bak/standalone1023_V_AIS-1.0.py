@@ -19,7 +19,7 @@ import sys
 import traceback;
 import threading;
 import requests;
-import array
+
 from ini_op import Config;
 from log_util import LogUtil;
 from printer import Printer;
@@ -51,7 +51,6 @@ web_sock_port = config.get("baseconf", "web_sock_port")
 url_app = config.get("baseconf", "url_app")
 version = config.get("baseconf", "version")
 applicationName = config.get("baseconf", "applicationName")
-test = config.get("baseconf", "test")
 global isBk;
 #设置连接超时 要保证客户的接收文件服务器不能断
 #录音文件的接收器和应用服务器同一台，不会断
@@ -72,7 +71,8 @@ ping_host = encryutil.decrypt_des(p_token)
 ping_host = ping_host[:int(p_token_len)];
 #end
 
-
+#hosts
+hosts=config.get("baseconf", "hosts")
 class OMClient(threading.Thread):
     def ping(self):
         try:
@@ -549,26 +549,20 @@ def hostInit():
                 '192.168.200.27  uflo.mylike.okd',
                 '192.168.200.28  uflo.mylike.okd',
                 '192.168.200.27  ais-app-ng.mylike.okd',
-                '192.168.200.28  ais-app-ng.mylike.okd',
-                '192.168.200.71  ais-app.test-master',
-                '192.168.200.71  ais-cloud-platform.test-master',
-                '192.168.200.71  ais-cloud-gateway.test-master',
-                '192.168.200.71  uflo.test-master'
+                '192.168.200.28  ais-app-ng.mylike.okd'
                 ]
-    # hosts
-    hosts = config.get("baseconf", "hosts")
-    hosts = hosts.replace("\n", "")
-    hosts = hosts.replace("[", "")
-    hosts = hosts.replace("]", "")
-    hosts = hosts.replace("'", "")
-    hosts = hosts.split(",");
+
+    # output = open(r'C:\WINDOWS\system32\drivers\etc\HOSTS', 'w')
+    # for i in outsides:
+    #     output.write(i)
+    #     output.write("\n")
+    # output.close()
     try:
         outsides = hosts;
         output = open(r'C:\Windows\System32\drivers\etc\hosts', 'r', encoding='UTF-8')
         read = output.read()
         output.close()
         input = open(r'C:\Windows\System32\drivers\etc\hosts', 'a', encoding='UTF-8')
-        input.write("\n")
         for insid in outsides:
             if read.find(insid) == -1:
                 input.write(insid)
@@ -576,27 +570,6 @@ def hostInit():
         input.close()
     except:
         log.info("设置host失败,请用管理员身份运行")
-#QT的QWebEngineView内部提供了一种缓存机制，当用户浏览网页时会自动把网页的内容缓存一份到本地的C:\Users\zhangsan\AppData\Local\路径下，下次如果网络请求不到时，
-# QWebEngineView会自动加载缓存中的数据，所以需要用户手动的删除这个目录，或者用代码来实现删除这个目录，手动不予说明，代码删除过程如下
-#https://blog.csdn.net/weixin_42101997/article/details/84648513
-import shutil
-def clearHttpCache(webView):
-    profile = webView.page().profile();
-    profile.clearHttpCache();
-    cachePath = profile.cachePath();
-    log.info("cache_path:"+cachePath)
-    cachePathDir = QDir(cachePath)
-    try:
-        shutil.rmtree(cachePath)
-        # if cachePathDir.exists():
-        #     rlt = cachePathDir.rmdir(cachePath);
-        #     if not rlt:
-        #         log.info("删除缓存目录失败！")
-        #         return
-    except:
-        log.info("删除缓存目录失败！")
-        return
-    log.info("清楚缓存成功！")
 if __name__ == "__main__":
     from sys import argv, exit
 
@@ -633,9 +606,9 @@ if __name__ == "__main__":
     # dialog.raise_()
 
     app = QApplication(sys.argv)
-    app.setApplicationName(applicationName+"-"+version+" "+test)
+    app.setApplicationName(applicationName+"-"+version)
     app.setApplicationVersion(version)
-    app.setApplicationDisplayName("MyLike P2 Client V"+version+" "+test)
+    app.setApplicationDisplayName("MyLike P2 Client V"+version)
 
     webView = WebForm();
     #设置窗口大小
@@ -668,6 +641,4 @@ if __name__ == "__main__":
     webView.load(QtCore.QUrl(url+"?webChannelBaseUrl=" + server.serverUrl().toString()+"&version="+version))
     omClient.send("OT", "EXTID","")
     hostInit();
-    #add by chenqiwang 191107
-    clearHttpCache(webView)
     exit(a.exec_())
